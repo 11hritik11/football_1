@@ -5,6 +5,8 @@ import pickle
 import numpy as np
 import pandas as pd
 import streamlit as st
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
 
 st.set_page_config(page_title="Which Pro Footballer Am I?", layout="wide")
 
@@ -16,7 +18,7 @@ st.write("This app finds the most similar footballers using KNN (nearest neighbo
 # ---------------------------
 @st.cache_resource
 def load_bundle(pkl_path: str):
-    with open(pkl_path, "rb") as f:
+    with open(BASE_DIR / "knn_footballer_model.pkl", "rb") as f:
         knn, scaler, le_positions, le_national_team, feature_columns = pickle.load(f)
     return knn, scaler, le_positions, le_national_team, list(feature_columns)
 
@@ -28,7 +30,8 @@ knn, scaler, le_positions, le_national_team, feature_columns = load_bundle("knn_
 # ---------------------------
 @st.cache_data
 def load_processed_df(csv_path: str):
-    df = pd.read_csv(r'C:\Users\Acer\Developer\football\processed_fifa_df.csv')
+    df = pd.read_csv(BASE_DIR / "processed_fifa_df.csv")
+
 
     # IMPORTANT:
     # Your CSV here MUST already be the final processed dataframe that contains:
